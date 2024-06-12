@@ -2,12 +2,43 @@ import re
 from playwright.sync_api import Page, expect
 
 def test_has_title(page: Page):
+    """
+    This test verifies the title of the Knowit website.
+
+    Args:
+        page (Page): The Playwright Page object representing the browser context.
+
+    Steps:
+        1. Navigate to the Knowit website (https://knowit.se/).
+        2. Verify that the page title contains the substring "Knowit".
+
+    This test case checks if the title of the Knowit website homepage contains
+    the expected text "Knowit". The test passes if the page title contains the
+    substring "Knowit", regardless of the rest of the title text.
+    """
     page.goto("https://knowit.se/")
 
     # Expect a title "to contain" a substring.
     expect(page).to_have_title(re.compile("Knowit"))
 
 def test_get_om_oss_link(page: Page):
+    """
+    This test verifies the "Om oss" (About us) link on the Knowit website.
+
+    Args:
+        page (Page): The Playwright Page object representing the browser context.
+
+    Steps:
+        1. Navigate to the Knowit website (https://knowit.se/).
+        2. Accept the cookie pop-up by clicking the "Godkänn alla" (Accept all) button.
+        3. Click the "Om oss" (About us) link.
+        4. Verify that the page title contains the text "Om oss" (About us).
+
+    This test case simulates the user flow of navigating to the "About us" section
+    of the Knowit website. It verifies that clicking the "Om oss" link navigates
+    the user to the correct page, as indicated by the presence of "Om oss" in the
+    page title.
+    """
     page.goto("https://knowit.se/")
 
     #Accept the cookie pop-up
@@ -21,13 +52,34 @@ def test_get_om_oss_link(page: Page):
 
 
 def test_search_test(page: Page):
+    """
+    This test verifies the search functionality on the Knowit website.
+
+    Args:
+        page (Page): The Playwright Page object representing the browser context.
+
+    Steps:
+        1. Navigate to the Knowit website (https://knowit.se/).
+        2. Accept the cookie pop-up by clicking the "Godkänn alla" (Accept all) button.
+        3. Click the "sök" (search) button.
+        4. Enter the search term "test" in the search box.
+        5. Press the "Enter" key to submit the search.
+        6. Wait for 3 seconds to visually observe the search results.
+        7. Assert that the current URL ends with "/sok/?q=test", indicating that
+           the search was performed correctly.
+
+    This test case simulates the user flow of performing a search on the Knowit website.
+    It verifies that the user can enter a search term, submit the search, and that the
+    correct URL with the search query parameter is loaded.
+    """
     page.goto("https://knowit.se/")
 
     #Accept the cookie pop-up
     page.locator("[aria-label='Godkänn alla']").click()
 
     # Click the search button
-    page.get_by_role("button", name="Sök").click()
+   # page.get_by_role("button", name="Sök").click()
+    page.locator(".chakra-button .chakra-text").get_by_text("sök").click()
 
     # Click on the "Sök" and write "test"
     page.get_by_role("searchbox", name="Ange ett sökord").fill("test")
@@ -39,3 +91,38 @@ def test_search_test(page: Page):
 
     # Assert that the url ends with /sok/q=test
     assert page.url.endswith("/sok/?q=test")
+
+
+def test_hitta_ditt_nya_jobb(page: Page):
+    """
+    This function tests the "Hitta ditt nya jobb" (Find your new job) functionality on the Knowit website.
+
+    Args:
+        page (Page): The Playwright Page object representing the browser context.
+
+    Steps:
+        1. Navigate to the Knowit website (https://knowit.se/).
+        2. Accept the cookie pop-up by clicking the "Godkänn alla" (Accept all) button.
+        3. Click the "Hitta ditt nya jobb här" (Find your new job here) link.
+        4. Click the "ort" (location) button to open the location dropdown.
+        5. From the location dropdown options, click the option with the text "Lund".
+        6. Assert that the current URL ends with "/karriar/lediga-jobb/?Ort=Lund",
+           which indicates that the location filter has been applied correctly.
+
+    This test case simulates the user flow of searching for job openings in Lund on the Knowit website.
+    It verifies that the user can navigate to the job search page, select a location from the dropdown,
+    and that the correct URL is loaded with the selected location as a query parameter.
+    """
+    page.goto("https://knowit.se/")
+
+    # Accept the cookie pop-up
+    page.locator("[aria-label='Godkänn alla']").click()
+
+    page.get_by_role("link", name="Hitta ditt nya jobb här").click()
+
+    page.get_by_role("button", name="ort").click()
+
+    # Find the option with text "Quality Assurance"
+    page.locator("#Dropdown-1-options .chakra-text").get_by_text("Lund").click()
+
+    assert page.url.endswith("/karriar/lediga-jobb/?Ort=Lund")
