@@ -164,5 +164,5 @@ def test_find_jov_POM(page: Page):
     lediga_jobb_page.filter_jobs_for_city("Lund")
 
     # Assert that the url ends with "lediga-jobb/?Ort=Lund"
-    assert page.url.endswith("/lediga-jobb/?Ort=Lund")
+    assert page.url.endswith("/karriar/lediga-jobb/?Ort=Lund")
 
