@@ -131,7 +131,7 @@ def test_hitta_ditt_nya_jobb(page: Page):
 
 
 
-def test_find_jov_POM(page: Page):
+def test_hitta_ditt_nya_jobb_POM(page: Page):
     """
         This test verifies the find new job in a specific city on the Knowit website. This time using a POM structure
 
