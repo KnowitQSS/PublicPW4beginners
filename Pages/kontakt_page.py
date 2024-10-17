@@ -28,3 +28,11 @@ class KontaktPage(BasePage):
             # If the address doesn't appear (timeout occurs), return False
             # This could be due to the address not existing or not being visible within 3 seconds
             return False
+
+
+    def does_address_exist_2(self, address):
+        # Check if a specific address exists on the page
+        # The address is expected to be in a heading element
+        address_selector = self.page.get_by_role(role="heading", name=address)
+
+        address_selector.is_visible(timeout=3000)
