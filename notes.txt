@@ -1,0 +1,1 @@
+pytest .\Tests\test_example.py -k 'test_hitta_ditt_nya_jobb'
