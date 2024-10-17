@@ -3,10 +3,10 @@ from Pages.base_page import BasePage
 class KontaktPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
-        self.url = "https://knowit.se/kontakt"
 
-    def navigate(self):
-        self.page.goto(self.url)
+    @property
+    def url_segment(self):
+        return "/kontakt"
 
     def click_on_town(self, city):
         # Click on a button representing a specific city
