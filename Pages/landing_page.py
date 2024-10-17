@@ -4,6 +4,10 @@ class LandingPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
 
+    @property
+    def url_segment(self) -> str:
+        return ""
+
 
     def find_new_job(self):
         """

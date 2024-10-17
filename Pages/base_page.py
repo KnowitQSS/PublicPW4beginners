@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from playwright.sync_api import Page
 from pytest_base_url.plugin import base_url
 
@@ -8,9 +10,12 @@ class BasePage:
         self.base_url = "https://knowit.se/"
 
     @property
-    def url_segment(self):
-        return ""  # Base implementation returns an empty string
-
+    @abstractmethod
+    def url_segment(self) -> str:
+        """
+        Each child class must implement this property to define its URL segment.
+        """
+        raise NotImplementedError("Child classes must implement url_segment")
 
     def dismiss_cookies(self):
         """
@@ -20,7 +25,6 @@ class BasePage:
         (Swedish for 'Accept all') to dismiss the cookie consent popup.
         """
         self.page.locator("[aria-label='Godkänn alla']").click()
-
 
     def navigate_to(self):
         url = self.base_url + self.url_segment

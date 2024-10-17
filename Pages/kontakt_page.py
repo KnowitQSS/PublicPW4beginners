@@ -5,7 +5,7 @@ class KontaktPage(BasePage):
         super().__init__(page)
 
     @property
-    def url_segment(self):
+    def url_segment(self) -> str:
         return "/kontakt"
 
     def click_on_town(self, city):
