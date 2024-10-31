@@ -3,6 +3,7 @@ from Pages.kontakt_page import KontaktPage
 from Pages.landing_page import LandingPage
 from Pages.menu_page import MenuPage
 
+
 def test_does_address_exist(page: Page):
     # Initialize page objects for different sections of the website
     landing_page = LandingPage(page)

@@ -1,5 +1,6 @@
 from Pages.base_page import BasePage
-from typing import  List
+from typing import List
+
 
 class KontaktPage(BasePage):
     def __init__(self, page):
@@ -9,13 +10,11 @@ class KontaktPage(BasePage):
     def url_segment(self) -> str:
         return "/kontakt"
 
-
     def click_on_town(self, city):
         # Click on a button representing a specific city
         # The button is identified by its role ("button") and name attribute or text content (city)
         # The city parameter allows this method to be used for different towns/cities
         self.page.get_by_role("button", name=city).click()
-
 
     def does_address_exist(self, address):
         # Check if a specific address exists on the page
@@ -32,12 +31,11 @@ class KontaktPage(BasePage):
             # This could be due to the address not existing or not being visible within 3 seconds
             return False
 
-
     def does_location_exist(self, location):
         # Check if a specific location exists on the page
         # The location is expected to be in a heading element
         location_selector = self.page.get_by_role(role="heading", name=location).first
-        #location_selector = self.page.locator(f".chakra-heading.css-1w70z8g:has-text('{location}')").first
+        # location_selector = self.page.locator(f".chakra-heading.css-1w70z8g:has-text('{location}')").first
 
         try:
             # Wait for up to 3 seconds (3000 ms) for the location to become visible
@@ -47,8 +45,8 @@ class KontaktPage(BasePage):
         except:
             # If the location doesn't appear (timeout occurs), return False
             # This could be due to the location not existing or not being visible within 3 seconds
+            self.take_screenshot()
             return False
-
 
     def extract_locations_from_button_texts(self) -> List[str]:
         """
@@ -64,12 +62,4 @@ class KontaktPage(BasePage):
         buttons = self.page.locator('button.css-dm8w6v').all()
 
         # Extract text from each button
-        button_texts = []
-        for button in buttons:
-            text =  button.inner_text()
-            button_texts.append(text)
-
-        return button_texts
-
-
-
+        return [button.inner_text() for button in buttons]

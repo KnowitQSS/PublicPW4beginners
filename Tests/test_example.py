@@ -198,6 +198,8 @@ def test_go_to_kontakt_page(page:Page):
     lediga_jobb = LedigaJobbPage(page)
 
     kontakt_page.navigate_to()
+    kontakt_page.dismiss_cookies()
     lediga_jobb.navigate_to()
     landing_page.navigate_to()
     kontakt_page.navigate_to()
+    kontakt_page.take_screenshot()
