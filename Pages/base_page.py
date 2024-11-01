@@ -32,8 +32,6 @@ class BasePage:
         url = self.base_url + self.url_segment
         self.page.goto(url)
 
-    import os
-    from datetime import datetime
 
     def take_screenshot(self, path=None):
         """

@@ -40,3 +40,6 @@ def test_all_locations_exist(page: Page):
     for location in locations_list:
         kontakt_page.click_on_town(location)
         assert kontakt_page.does_location_exist(location)
+
+    # And now let the test fail so that
+    assert kontakt_page.does_location_exist("Zanzibar")
