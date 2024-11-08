@@ -33,34 +33,22 @@ class BasePage:
         self.page.goto(url)
 
 
-    def take_screenshot(self, path=None):
+    def take_screenshot(self):
         """
         Take a screenshot of the current page.
-
-        Args:
-            path (str, optional): Custom path for the screenshot.
-                                   Defaults to None.
-
-        Returns:
-            str: Path where the screenshot was saved
         """
-        # Create screenshots directory if it doesn't exist
-        os.makedirs('screenshots', exist_ok=True)
 
-        # Generate a unique filename if no path is provided
-        if not path:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            path = os.path.join('screenshots', f'screenshot_{self.__class__.__name__}_{timestamp}.png')
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        screenshots_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Screenshots')
 
         try:
             # Ensure the directory for the path exists
-            os.makedirs(os.path.dirname(path), exist_ok=True)
+            os.makedirs(screenshots_dir, exist_ok=True)
+            path = os.path.join(screenshots_dir, f'{self.__class__.__name__}_{timestamp}.png')
 
             # Take the screenshot
             self.page.screenshot(path=path, full_page=True)
 
-            return path
         except Exception as e:
             # Log the error (you might want to use a proper logging framework)
             print(f"Error taking screenshot: {e}")
-            return None

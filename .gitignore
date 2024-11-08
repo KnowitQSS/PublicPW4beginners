@@ -1,3 +1,5 @@
 .idea/
 */__pycache__/
 .venv
+Screenshots/*
+!Screenshots/.gitkeep

@@ -41,5 +41,5 @@ def test_all_locations_exist(page: Page):
         kontakt_page.click_on_town(location)
         assert kontakt_page.does_location_exist(location)
 
-    # And now let the test fail so that
+    # And now let the test fail so that we also can test the screenshot functionality
     assert kontakt_page.does_location_exist("Zanzibar")

@@ -35,12 +35,9 @@ class KontaktPage(BasePage):
         # Check if a specific location exists on the page
         # The location is expected to be in a heading element
         location_selector = self.page.get_by_role(role="heading", name=location).first
-        # location_selector = self.page.locator(f".chakra-heading.css-1w70z8g:has-text('{location}')").first
 
         try:
-            # Wait for up to 3 seconds (3000 ms) for the location to become visible
             location_selector.wait_for(timeout=3000, state="visible")
-            # If the location becomes visible within the timeout, return True
             return True
         except:
             # If the location doesn't appear (timeout occurs), return False
