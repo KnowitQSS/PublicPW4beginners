@@ -153,7 +153,7 @@ def test_hitta_ditt_nya_jobb_POM(page: Page):
 
         This test case simulates the user flow of navigating to the find new job on the Knowit website.
         It verifies that the user can use the city filter, select a city i the dropdown, and that the
-        correct URL with the filter query parameter is loaded.
+        correct URL with the filter query parameter is loaded. 
         """
 
     landing_page = LandingPage(page)
