@@ -1,3 +1,4 @@
+import os
 import random
 import re
 
@@ -209,6 +210,16 @@ def test_go_to_kontakt_page(page:Page):
 
 @pytest.fixture(scope="function")
 def setup_pet_page(page) -> Page:
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the relative path to the GetPet.html file
+    get_pet_file_path = os.path.join(script_dir, "..", "petstore", "AddPet.html")
+
+    # Convert to an absolute path and ensure it's in the correct format
+    get_pet_file_path = os.path.abspath(get_pet_file_path)
+    add_pet_file_path = f"file://{get_pet_file_path}"
+
     # Define the path to the local AddPet HTML file
     add_pet_file_path = "file:///C:/Users/magwal/projects/PlayWrightForBeginners/petstore/AddPet.html"
 
@@ -245,8 +256,16 @@ def test_add_and_get_pet(setup_pet_page):
 
     pet_data = setup_pet_page
     page = pet_data['page']
-    # Define the path to the local GetPet HTML file
-    get_pet_file_path = "file:///C:/Users/magwal/projects/PlayWrightForBeginners/petstore/GetPet.html"
+
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the relative path to the GetPet.html file
+    get_pet_file_path = os.path.join(script_dir, "..", "petstore", "GetPet.html")
+
+    # Convert to an absolute path and ensure it's in the correct format
+    get_pet_file_path = os.path.abspath(get_pet_file_path)
+    get_pet_file_path = f"file://{get_pet_file_path}"
 
     # Construct the URL with the PetID parameter for the GetPet page
     get_pet_url = f"{get_pet_file_path}?petid={pet_data['pet_id']}"
