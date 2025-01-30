@@ -25,13 +25,7 @@ def test_does_address_exist(page: Page):
     assert kontakt_page.does_address_exist("Mobilvägen 10")
 
 
-def test_all_locations_exist(page: Page):
-    # Initialize page object for kontakt page
-    kontakt_page = KontaktPage(page)
-
-    # Navigate to the contact page
-    kontakt_page.navigate_to()
-    kontakt_page.dismiss_cookies()
+def test_all_locations_exist(page: Page, kontakt_page: KontaktPage):
 
     # Get a list of all the locations from location buttons
     locations_list = kontakt_page.extract_locations_from_button_texts()
