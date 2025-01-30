@@ -220,9 +220,6 @@ def setup_pet_page(page) -> Page:
     get_pet_file_path = os.path.abspath(get_pet_file_path)
     add_pet_file_path = f"file://{get_pet_file_path}"
 
-    # Define the path to the local AddPet HTML file
-    add_pet_file_path = "file:///C:/Users/magwal/projects/PlayWrightForBeginners/petstore/AddPet.html"
-
     # Generate a random Pet ID between 2000 and 3000
     pet_id = random.randint(2000, 3000)
     # Generate a random Pet Name
