@@ -18,7 +18,7 @@ def page(browser: Browser) -> Page:
 
 
 @pytest.fixture(scope="function")
-def kontakt_page(page: Page):
+def kontakt_page_fixture(page: Page):
     kontakt_page = KontaktPage(page)
     # Navigate to the contact page
     kontakt_page.navigate_to()

@@ -25,15 +25,15 @@ def test_does_address_exist(page: Page):
     assert kontakt_page.does_address_exist("Mobilvägen 10")
 
 
-def test_all_locations_exist(page: Page, kontakt_page: KontaktPage):
+def test_all_locations_exist(page: Page, kontakt_page_fixture):
 
     # Get a list of all the locations from location buttons
-    locations_list = kontakt_page.extract_locations_from_button_texts()
+    locations_list = kontakt_page_fixture.extract_locations_from_button_texts()
 
     # Loop through the list, click on each button and assert that the name of the location shows up on page
     for location in locations_list:
-        kontakt_page.click_on_town(location)
-        assert kontakt_page.does_location_exist(location)
+        kontakt_page_fixture.click_on_town(location)
+        assert kontakt_page_fixture.does_location_exist(location)
 
     # And now let the test fail so that we also can test the screenshot functionality
-    assert kontakt_page.does_location_exist("Zanzibar")
+    assert kontakt_page_fixture.does_location_exist("Zanzibar")
