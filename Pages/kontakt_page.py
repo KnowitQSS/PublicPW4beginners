@@ -16,6 +16,7 @@ class KontaktPage(BasePage):
         # The city parameter allows this method to be used for different towns/cities
         self.page.get_by_role("button", name=city).click()
 
+
     def does_address_exist(self, address):
         # Check if a specific address exists on the page
         # The address is expected to be in a heading element

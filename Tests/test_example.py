@@ -1,4 +1,7 @@
+import random
 import re
+
+import pytest
 from playwright.sync_api import Page, expect
 
 from Pages.kontakt_page import KontaktPage
@@ -203,3 +206,58 @@ def test_go_to_kontakt_page(page:Page):
     landing_page.navigate_to()
     kontakt_page.navigate_to()
     kontakt_page.take_screenshot()
+
+@pytest.fixture(scope="function")
+def setup_pet_page(page) -> Page:
+    page = browser.new_page()
+    yield page
+    page.close()
+
+def test_add_and_get_pet(page: Page):
+    # Define the path to the local AddPet HTML file
+    add_pet_file_path = "file:///C:/Users/magwal/projects/PlayWrightForBeginners/petstore/AddPet.html"
+    # Define the path to the local GetPet HTML file
+    get_pet_file_path = "file:///C:/Users/magwal/projects/PlayWrightForBeginners/petstore/GetPet.html"
+
+    # Generate a random Pet ID between 2000 and 3000
+    pet_id = random.randint(2000, 3000)
+    # Generate a random Pet Name
+    #pet_name = f"Pet{random.randint(1000, 9999)}"
+    pet_name = "Magnus"
+    # Define the Photo URL
+    photo_url = "https://images.dog.ceo/breeds/corgi-cardigan/n02113186_11035.jpg"
+
+    # Print the Pet ID to the console
+    print(f"Generated Pet ID: {pet_id}")
+
+    # Open the AddPet page
+    page.goto(add_pet_file_path)
+    # Fill in the Pet ID, Pet Name, and Photo URL
+    page.fill("#petId", str(pet_id))
+    page.fill("#petName", pet_name)
+    page.fill("#photoUrl", photo_url)
+    # Click the PostPet button
+    page.click("#postPetButton")
+
+    # Wait for a success message or some indication that the pet was added
+    page.wait_for_selector("text=Pet added successfully")
+
+    # Construct the URL with the PetID parameter for the GetPet page
+    get_pet_url = f"{get_pet_file_path}?petid={pet_id}"
+    # Open the GetPet page
+    page.goto(get_pet_url)
+    # Wait for either the image or the message to be visible
+    page.wait_for_selector('img, .message', state='visible')
+
+    # Add assertions or further interactions as needed
+    assert page.locator('img').is_visible() or page.locator('.message').is_visible()
+    if page.locator('img').is_visible():
+        assert page.locator('img').get_attribute('src') == photo_url
+
+    assert page.locator('#pet-name').inner_text().endswith("Magnus")
+
+    delete_button = page.get_by_role(role="button", name="Delete Pet")
+
+    delete_button.wait_for(timeout=3000, state="visible")
+    delete_button.click()
+    page.get_by_text("Pet deleted successfully.").wait_for(timeout=3000, state="visible")
