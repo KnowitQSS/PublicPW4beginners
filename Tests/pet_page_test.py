@@ -58,7 +58,7 @@ def setup_pet_page(page: Page):
    # page.get_by_text("Pet deleted successfully.").wait_for(timeout=3000, state="visible")
 
 
-def test_get_pet(setup_pet_page: dict):
+def test_get_pet_info(setup_pet_page: dict):
     """
     Test to add a pet using the AddPet page and verify its details on the GetPet page.
 
