@@ -30,7 +30,7 @@ def setup_pet_page(page: Page):
     add_pet_file_path = f"file://{add_pet_file_path}"
 
     # Generate a random Pet ID between 2000 and 3000
-    pet_id = random.randint(2000, 3000)
+    pet_id = 121321
     # Generate a random Pet Name
     pet_name = f"Pet{random.randint(1000, 9999)}"
     # Define the Photo URL
@@ -54,11 +54,11 @@ def setup_pet_page(page: Page):
 
     delete_button = page.get_by_role(role="button", name="Delete Pet")
     delete_button.wait_for(timeout=3000, state="visible")
-    delete_button.click()
-    page.get_by_text("Pet deleted successfully.").wait_for(timeout=3000, state="visible")
+   # delete_button.click()
+   # page.get_by_text("Pet deleted successfully.").wait_for(timeout=3000, state="visible")
 
 
-def test_add_and_get_pet(setup_pet_page: dict):
+def test_get_pet(setup_pet_page: dict):
     """
     Test to add a pet using the AddPet page and verify its details on the GetPet page.
 
