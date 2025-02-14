@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AddPet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h2>AddPet</h2>
+    <div class="form-group">
+        <label for="petId">Enter Pet ID:</label>
+        <input type="text" id="petId" placeholder="Enter Pet ID" oninput="validateForm()">
+    </div>
+    <div class="form-group">
+        <label for="petName">Enter Pet Name:</label>
+        <input type="text" id="petName" placeholder="Enter Pet Name" oninput="validateForm()">
+    </div>
+    <div class="form-group">
+        <label for="photoUrl">Enter Photo URL:</label>
+        <input type="text" id="photoUrl" placeholder="Enter Photo URL" oninput="validateForm()">
+    </div>
+    <button id="postPetButton" onclick="makeApiCall()" disabled>PostPet</button>
+    <div id="message" class="message" style="display: none;"></div>
+
+    <script>
+        function validateForm() {
+            const petId = document.getElementById('petId').value;
+            const petName = document.getElementById('petName').value;
+            const photoUrl = document.getElementById('photoUrl').value;
+            const postPetButton = document.getElementById('postPetButton');
+
+            postPetButton.disabled = !petId || !petName || !photoUrl;
+        }
+
+        function makeApiCall() {
+            const petId = document.getElementById('petId').value;
+            const petName = document.getElementById('petName').value;
+            const photoUrl = document.getElementById('photoUrl').value;
+
+            if (!petId || !petName || !photoUrl) {
+                alert('Please enter Pet ID, Pet Name, and Photo URL');
+                return;
+            }
+
+            const data = {
+                id: parseInt(petId),
+                category: {
+                    id: 0,
+                    name: "dog"
+                },
+                name: petName,
+                photoUrls: [photoUrl],
+                tags: [
+                    {
+                        id: 0,
+                        name: "string"
+                    }
+                ],
+                status: "available"
+            };
+
+            fetch('https://petstore.swagger.io/v2/pet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                showMessage('Pet added successfully', 'success');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                showMessage('Error adding pet', 'error');
+            });
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
