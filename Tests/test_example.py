@@ -1,4 +1,8 @@
+import os
+import random
 import re
+
+import pytest
 from playwright.sync_api import Page, expect
 
 from Pages.kontakt_page import KontaktPage
@@ -160,7 +164,7 @@ def test_hitta_ditt_nya_jobb_POM(page: Page):
     lediga_jobb_page = LedigaJobbPage(page)
 
     #Steps 1-3:
-    landing_page.navigate()
+    landing_page.navigate_to()
     landing_page.dismiss_cookies()
     landing_page.find_new_job()
 
@@ -179,15 +183,27 @@ def test_does_address_exist(page: Page):
     kontakt_page = KontaktPage(page)
 
     # Navigate to the landing page
-    landing_page.navigate()
+    landing_page.navigate_to()
     # Dismiss any cookie consent dialogs
     landing_page.dismiss_cookies()
 
     # Navigate to the contact page through the menu
-    menu_page.click_on_menu()
+    menu_page.navigate_to()
     menu_page.click_on_kontakt()
 
     # On the contact page, select the town "Lund"
     kontakt_page.click_on_town("Lund")
     # Assert that the address "Mobilvägen 10" exists for Lund
     assert kontakt_page.does_address_exist("Mobilvägen 10")
+
+def test_go_to_kontakt_page(page:Page):
+    kontakt_page = KontaktPage(page)
+    landing_page = LandingPage(page)
+    lediga_jobb = LedigaJobbPage(page)
+
+    kontakt_page.navigate_to()
+    kontakt_page.dismiss_cookies()
+    lediga_jobb.navigate_to()
+    landing_page.navigate_to()
+    kontakt_page.navigate_to()
+    kontakt_page.take_screenshot()

@@ -4,7 +4,8 @@ class MenuPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
 
-    def click_on_menu(self):
+
+    def navigate_to(self):
         # Find and click the "Meny" (Menu) button
         # The button is located using a combination of CSS selectors and text content
         # It looks for an element with classes "chakra-button" and "chakra-text" that contains the text "Meny"

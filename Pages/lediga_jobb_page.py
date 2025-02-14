@@ -4,6 +4,10 @@ class LedigaJobbPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
 
+    @property
+    def url_segment(self):
+        return "/karriar/lediga-jobb"
+
     def filter_jobs_for_city(self, city):
         """
         Filter job listings by city.

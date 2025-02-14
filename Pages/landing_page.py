@@ -3,19 +3,11 @@ from Pages.base_page import BasePage
 class LandingPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
-        self.url = "https://knowit.se/"
 
-    def navigate(self):
-        self.page.goto(self.url)
+    @property
+    def url_segment(self) -> str:
+        return ""
 
-    def dismiss_cookies(self):
-        """
-        Dismiss the cookie consent popup by clicking the 'Accept all' button.
-
-        This function finds and clicks the button with the aria-label 'Godkänn alla'
-        (Swedish for 'Accept all') to dismiss the cookie consent popup.
-        """
-        self.page.locator("[aria-label='Godkänn alla']").click()
 
     def find_new_job(self):
         """

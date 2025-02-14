@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Pet</title>
+    <style>
+        /* ... (styles remain the same) */
+    </style>
+</head>
+<body>
+    <h2>Get Pet</h2>
+    <div id="content"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const petId = urlParams.get('petid');
+
+            if (!petId) {
+                document.getElementById('content').innerHTML = '<p class="message">Pet ID is missing in the URL.</p>';
+                return;
+            }
+
+            fetch(`https://petstore.swagger.io/v2/pet/${petId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            document.getElementById('content').innerHTML = '<p class="message">Pet not found.</p>';
+                            //addDeleteButton(petId); // Still show delete button for potentially re-creating
+                        } else {
+                            return response.json().then(err => {throw new Error(err.message || `Error fetching pet: ${response.status}`)}); // Handle other errors
+                        }
+                    } else {
+                      return response.json();
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        let contentHTML = ""; // Initialize an empty string
+
+                        if (data.name) {
+                            contentHTML += `<div id="pet-name">Pet Name: ${data.name}</div>`;
+                        }
+
+                        if (data.photoUrls && data.photoUrls.length > 0) {
+                            contentHTML += `<img src="${data.photoUrls[0]}" alt="Pet Photo">`;
+                        } else {
+                            contentHTML += '<p class="message">No image available for this pet.</p>';
+                        }
+
+                        document.getElementById('content').innerHTML = contentHTML; // Set innerHTML once
+
+                        addDeleteButton(petId);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('content').innerHTML = `<p class="message">${error.message}</p>`;
+                    addDeleteButton(petId); // Still show delete button in case pet can be re-created
+                });
+
+            function addDeleteButton(petId) {
+              const deleteButton = document.createElement('button');
+              deleteButton.className = 'delete-button';
+              deleteButton.textContent = 'Delete Pet';
+              deleteButton.addEventListener('click', () => {
+                  deletePet(petId);
+              });
+              document.getElementById('content').appendChild(deleteButton);
+            }
+
+
+            function deletePet(petId) {
+                fetch(`https://petstore.swagger.io/v2/pet/${petId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('content').innerHTML = '<p>Pet deleted successfully.</p>';
+                    } else if (response.status === 404) {
+                        document.getElementById('content').innerHTML = '<p class="message">Pet not found.</p>';
+                    } else {
+                        return response.json().then(err => {throw new Error(err.message || 'Failed to delete pet.')});
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting pet:', error);
+                    document.getElementById('content').innerHTML = `<p class="message">Error deleting pet: ${error.message}</p>`;
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
