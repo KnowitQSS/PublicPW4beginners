@@ -2,7 +2,7 @@ from playwright.sync_api import Page
 from Pages.kontakt_page import KontaktPage
 from Pages.landing_page import LandingPage
 from Pages.menu_page import MenuPage
-
+from utils.logger_config import TestLogger
 
 def test_does_address_exist(page: Page):
     # Initialize page objects for different sections of the website
@@ -26,12 +26,15 @@ def test_does_address_exist(page: Page):
 
 
 def test_all_locations_exist(page: Page, kontakt_page_fixture):
+    logger = TestLogger().get_logger()
 
+    logger.info("Starting test_all_locations_exist")
     # Get a list of all the locations from location buttons
     locations_list = kontakt_page_fixture.extract_locations_from_button_texts()
 
     # Loop through the list, click on each button and assert that the name of the location shows up on page
     for location in locations_list:
+        logger.info(f"Checking if location '{location}' exists on the page")
         kontakt_page_fixture.click_on_town(location)
         assert kontakt_page_fixture.does_location_exist(location)
 

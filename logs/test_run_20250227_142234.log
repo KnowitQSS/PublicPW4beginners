@@ -1,0 +1,15 @@
+2025-02-27 14:22:34,671 - INFO - Starting new browser session
+2025-02-27 14:22:34,928 - INFO - Creating new page
+2025-02-27 14:22:35,168 - INFO - Initializing KontaktPage
+2025-02-27 14:22:35,170 - INFO - Initializing KontaktPage
+2025-02-27 14:22:35,170 - INFO - Navigating to contact page
+2025-02-27 14:22:35,170 - INFO - Navigating to: https://knowit.se//kontakt
+2025-02-27 14:22:36,947 - INFO - Dismissing cookies
+2025-02-27 14:22:37,086 - ERROR - Test failed: test_all_locations_exist
+2025-02-27 14:22:37,086 - ERROR - Exception type: AttributeError
+2025-02-27 14:22:37,086 - ERROR - Exception message: Locator.click: 'Frame' object has no attribute 'is_main'
+2025-02-27 14:22:37,086 - ERROR - Current page URL: https://www.knowit.se/kontakt
+2025-02-27 14:22:37,172 - ERROR - Screenshot saved to: C:\Automation\PlayWrightForBeginners\screenshots\failure_test_all_locations_exist_20250227_142237.png
+2025-02-27 14:22:37,190 - ERROR - Page HTML saved to: C:\Automation\PlayWrightForBeginners\page_dumps\failure_test_all_locations_exist_20250227_142237.html
+2025-02-27 14:22:37,190 - INFO - Closing page
+2025-02-27 14:22:37,243 - INFO - Closing browser session

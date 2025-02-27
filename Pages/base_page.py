@@ -1,4 +1,5 @@
 import os
+from utils.logger_config import TestLogger
 from abc import abstractmethod
 from datetime import datetime
 
@@ -10,6 +11,8 @@ class BasePage:
     def __init__(self, page: Page):
         self.page = page
         self.base_url = "https://knowit.se/"
+        self.logger = TestLogger().get_logger()
+        self.logger.info(f"Initializing {self.__class__.__name__}")
 
     @property
     @abstractmethod
@@ -30,7 +33,29 @@ class BasePage:
 
     def navigate_to(self):
         url = self.base_url + self.url_segment
+        self.logger.info(f"Navigating to: {url}")
         self.page.goto(url)
+
+
+    def click_element(self, selector):
+        self.logger.info(f"Clicking element: {selector}")
+        try:
+            self.page.click(selector)
+            self.logger.info("Click successful")
+        except Exception as e:
+            self.logger.error(f"Failed to click element: {str(e)}")
+            self.take_screenshot(f"click_failed_{selector}")
+            raise
+
+    def fill_input(self, selector, value):
+        self.logger.info(f"Filling input {selector} with value")  # Not logging actual value for security
+        try:
+            self.page.fill(selector, value)
+            self.logger.info("Fill successful")
+        except Exception as e:
+            self.logger.error(f"Failed to fill input: {str(e)}")
+            self.take_screenshot(f"fill_failed_{selector}")
+            raise
 
 
     def take_screenshot(self):
@@ -48,6 +73,7 @@ class BasePage:
 
             # Take the screenshot
             self.page.screenshot(path=path, full_page=True)
+            self.logger.info(f"Screenshot saved to: {path}")
 
         except Exception as e:
             # Log the error (you might want to use a proper logging framework)

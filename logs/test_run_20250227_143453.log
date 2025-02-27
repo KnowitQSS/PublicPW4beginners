@@ -1,0 +1,57 @@
+2025-02-27 14:34:53,731 - INFO - Starting new browser session
+2025-02-27 14:34:54,185 - INFO - Creating new page
+2025-02-27 14:34:54,542 - INFO - Initializing KontaktPage
+2025-02-27 14:34:54,542 - INFO - Initializing KontaktPage
+2025-02-27 14:34:54,543 - INFO - Navigating to contact page
+2025-02-27 14:34:54,543 - INFO - Navigating to: https://knowit.se//kontakt
+2025-02-27 14:34:56,399 - INFO - Dismissing cookies
+2025-02-27 14:34:56,729 - INFO - Starting test_all_locations_exist
+2025-02-27 14:34:56,940 - INFO - Checking if location 'Borlänge' exists on the page
+2025-02-27 14:34:57,284 - INFO - Location 'Borlänge' found on the page.
+2025-02-27 14:34:57,284 - INFO - Checking if location 'Gävle' exists on the page
+2025-02-27 14:34:58,226 - INFO - Location 'Gävle' found on the page.
+2025-02-27 14:34:58,226 - INFO - Checking if location 'Göteborg' exists on the page
+2025-02-27 14:34:58,503 - INFO - Location 'Göteborg' found on the page.
+2025-02-27 14:34:58,503 - INFO - Checking if location 'Helsingborg' exists on the page
+2025-02-27 14:34:58,889 - INFO - Location 'Helsingborg' found on the page.
+2025-02-27 14:34:58,889 - INFO - Checking if location 'Jönköping' exists on the page
+2025-02-27 14:34:59,198 - INFO - Location 'Jönköping' found on the page.
+2025-02-27 14:34:59,198 - INFO - Checking if location 'Karlskrona' exists on the page
+2025-02-27 14:34:59,483 - INFO - Location 'Karlskrona' found on the page.
+2025-02-27 14:34:59,483 - INFO - Checking if location 'Karlstad' exists on the page
+2025-02-27 14:34:59,789 - INFO - Location 'Karlstad' found on the page.
+2025-02-27 14:34:59,789 - INFO - Checking if location 'Linköping' exists on the page
+2025-02-27 14:35:00,081 - INFO - Location 'Linköping' found on the page.
+2025-02-27 14:35:00,082 - INFO - Checking if location 'Luleå' exists on the page
+2025-02-27 14:35:00,280 - INFO - Location 'Luleå' found on the page.
+2025-02-27 14:35:00,280 - INFO - Checking if location 'Lund' exists on the page
+2025-02-27 14:35:00,592 - INFO - Location 'Lund' found on the page.
+2025-02-27 14:35:00,592 - INFO - Checking if location 'Malmö' exists on the page
+2025-02-27 14:35:00,907 - INFO - Location 'Malmö' found on the page.
+2025-02-27 14:35:00,907 - INFO - Checking if location 'Stockholm' exists on the page
+2025-02-27 14:35:01,250 - INFO - Location 'Stockholm' found on the page.
+2025-02-27 14:35:01,251 - INFO - Checking if location 'Sundsvall' exists on the page
+2025-02-27 14:35:01,565 - INFO - Location 'Sundsvall' found on the page.
+2025-02-27 14:35:01,565 - INFO - Checking if location 'Trollhättan' exists on the page
+2025-02-27 14:35:01,936 - INFO - Location 'Trollhättan' found on the page.
+2025-02-27 14:35:01,936 - INFO - Checking if location 'Umeå' exists on the page
+2025-02-27 14:35:02,410 - INFO - Location 'Umeå' found on the page.
+2025-02-27 14:35:02,410 - INFO - Checking if location 'Uppsala' exists on the page
+2025-02-27 14:35:02,727 - INFO - Location 'Uppsala' found on the page.
+2025-02-27 14:35:02,728 - INFO - Checking if location 'Örebro' exists on the page
+2025-02-27 14:35:03,044 - INFO - Location 'Örebro' found on the page.
+2025-02-27 14:35:03,044 - INFO - Checking if location 'Östersund' exists on the page
+2025-02-27 14:35:03,268 - INFO - Location 'Östersund' found on the page.
+2025-02-27 14:35:06,295 - ERROR - Location 'Zanzibar' with locator '<Locator frame=<Frame name= url='https://www.knowit.se/kontakt'> selector='internal:role=heading[name="Zanzibar"i] >> nth=0'>' not found on the page.
+2025-02-27 14:35:06,659 - INFO - Screenshot saved to: C:\Automation\PlayWrightForBeginners\Screenshots\KontaktPage_20250227_143506.png
+2025-02-27 14:35:06,667 - ERROR - Test failed: test_all_locations_exist
+2025-02-27 14:35:06,667 - ERROR - Exception type: AssertionError
+2025-02-27 14:35:06,667 - ERROR - Exception message: assert False
+ +  where False = does_location_exist('Zanzibar')
+ +    where does_location_exist = <Pages.kontakt_page.KontaktPage object at 0x00000190F418B0B0>.does_location_exist
+2025-02-27 14:35:06,667 - ERROR - Current page URL: https://www.knowit.se/kontakt
+2025-02-27 14:35:06,770 - ERROR - Screenshot saved to: C:\Automation\PlayWrightForBeginners\screenshots\failure_test_all_locations_exist_20250227_143506.png
+2025-02-27 14:35:06,805 - ERROR - Page HTML saved to: C:\Automation\PlayWrightForBeginners\page_dumps\failure_test_all_locations_exist_20250227_143506.html
+2025-02-27 14:35:06,806 - INFO - Finished with KontaktPage
+2025-02-27 14:35:06,806 - INFO - Closing page
+2025-02-27 14:35:06,868 - INFO - Closing browser session

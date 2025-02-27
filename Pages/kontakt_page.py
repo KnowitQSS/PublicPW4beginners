@@ -22,29 +22,22 @@ class KontaktPage(BasePage):
         # The address is expected to be in a heading element
         address_selector = self.page.get_by_role(role="heading", name=address)
 
-        try:
-            # Wait for up to 3 seconds (3000 ms) for the address to become visible
-            address_selector.wait_for(timeout=3000, state="visible")
-            # If the address becomes visible within the timeout, return True
-            return True
-        except:
-            # If the address doesn't appear (timeout occurs), return False
-            # This could be due to the address not existing or not being visible within 3 seconds
-            return False
+        # Wait for up to 3 seconds (3000 ms) for the address to become visible
+        address_selector.wait_for(timeout=3000, state="visible")
+        self.logger.info(f"Address '{address}' found on the page.")
+        # If the address becomes visible within the timeout, return True
+        return True
+
 
     def does_location_exist(self, location):
         # Check if a specific location exists on the page
         # The location is expected to be in a heading element
         location_selector = self.page.get_by_role(role="heading", name=location).first
 
-        try:
-            location_selector.wait_for(timeout=3000, state="visible")
-            return True
-        except:
-            # If the location doesn't appear (timeout occurs), return False
-            # This could be due to the location not existing or not being visible within 3 seconds
-            self.take_screenshot()
-            return False
+        location_selector.wait_for(timeout=3000, state="visible")
+        self.logger.info(f"Location '{location}' found on the page.")
+        return True
+
 
     def extract_locations_from_button_texts(self) -> List[str]:
         """
