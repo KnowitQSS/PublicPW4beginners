@@ -3,3 +3,7 @@
 .venv
 Screenshots/*
 !Screenshots/.gitkeep
+page_dumps/*
+!page_dumps/.gitkeep
+logs/*
+!logs/.gitkeep
