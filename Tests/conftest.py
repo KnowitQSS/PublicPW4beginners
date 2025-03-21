@@ -1,7 +1,7 @@
 import os
 import pytest
 from datetime import datetime
-from playwright.sync_api import Playwright, Browser, Page, sync_playwright
+from playwright.sync_api import Playwright, Browser, Page, BrowserContext, sync_playwright
 from Pages.kontakt_page import KontaktPage
 from utils.logger_config import TestLogger
 
@@ -11,8 +11,6 @@ class TestContext:
     current_page = None
     current_selector = None
     current_action = None
-
-
 test_context = TestContext()
 
 
@@ -24,6 +22,8 @@ def browser(playwright: Playwright) -> Browser:
     yield browser
     logger.info("Closing browser session")
     browser.close()
+
+
 
 @pytest.fixture(scope="function")
 def page(browser: Browser) -> Page:
@@ -116,3 +116,45 @@ def pytest_exception_interact(node, call, report):
 
         except Exception as e:
             logger.error(f"Failed to capture diagnostic information: {str(e)}")
+
+
+def pytest_configure(config):
+    """Register custom markers."""
+    config.addinivalue_line("markers", "trace: mark test to enable Playwright tracing")
+
+
+@pytest.fixture(scope="function")
+def context(browser: Browser, request):
+    """Create a new browser context with tracing configured based on marker."""
+    context = browser.new_context()
+
+    # Check if test is marked for tracing
+    if request.node.get_closest_marker("trace"):
+        # Create traces directory if it doesn't exist
+        traces_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'traces')
+        os.makedirs(traces_dir, exist_ok=True)
+
+        # Generate trace file name based on test name and timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        trace_file = os.path.join(traces_dir, f"{request.node.name}_{timestamp}.zip")
+
+        # Start tracing
+        context.tracing.start(
+            screenshots=True,
+            snapshots=True,
+            sources=True
+        )
+
+    yield context
+
+    # Stop and save trace if enabled
+    if request.node.get_closest_marker("trace"):
+        context.tracing.stop(path=trace_file)
+
+    context.close()
+
+
+@pytest.fixture(scope="function")
+def page(context: BrowserContext):
+    page = context.new_page()
+    yield page

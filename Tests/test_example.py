@@ -1,8 +1,5 @@
-import os
-import random
 import re
 
-import pytest
 from playwright.sync_api import Page, expect
 
 from Pages.kontakt_page import KontaktPage

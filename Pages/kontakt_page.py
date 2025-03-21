@@ -1,6 +1,6 @@
+from utils.common_imports import *
 from Pages.base_page import BasePage
 from typing import List
-
 
 class KontaktPage(BasePage):
     def __init__(self, page):
@@ -24,7 +24,7 @@ class KontaktPage(BasePage):
 
         # Wait for up to 3 seconds (3000 ms) for the address to become visible
         address_selector.wait_for(timeout=3000, state="visible")
-        self.logger.info(f"Address '{address}' found on the page.")
+        logger.info(f"Address '{address}' found on the page.")
         # If the address becomes visible within the timeout, return True
         return True
 
@@ -35,7 +35,7 @@ class KontaktPage(BasePage):
         location_selector = self.page.get_by_role(role="heading", name=location).first
 
         location_selector.wait_for(timeout=3000, state="visible")
-        self.logger.info(f"Location '{location}' found on the page.")
+        logger.info(f"Location '{location}' found on the page.")
         return True
 
 

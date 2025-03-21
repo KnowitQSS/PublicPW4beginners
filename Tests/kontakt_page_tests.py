@@ -1,8 +1,7 @@
-from playwright.sync_api import Page
+from utils.common_imports import *
 from Pages.kontakt_page import KontaktPage
 from Pages.landing_page import LandingPage
 from Pages.menu_page import MenuPage
-from utils.logger_config import TestLogger
 
 def test_does_address_exist(page: Page):
     # Initialize page objects for different sections of the website
@@ -24,9 +23,8 @@ def test_does_address_exist(page: Page):
     # Assert that the address "Mobilvägen 10" exists for Lund
     assert kontakt_page.does_address_exist("Mobilvägen 10")
 
-
+#@pytest.mark.trace
 def test_all_locations_exist(page: Page, kontakt_page_fixture):
-    logger = TestLogger().get_logger()
 
     logger.info("Starting test_all_locations_exist")
     # Get a list of all the locations from location buttons

@@ -5,6 +5,7 @@ from datetime import datetime
 class TestLogger:
     _instance = None
     _initialized = False
+    _logger = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -43,7 +44,15 @@ class TestLogger:
             console_handler.setFormatter(file_format)
             self.logger.addHandler(console_handler)
 
+            TestLogger._logger = self.logger
             TestLogger._initialized = True
 
-    def get_logger(self):
-        return self.logger
+    @classmethod
+    def get_logger(cls):
+        if cls._logger is None:
+            cls()
+        return cls._logger
+
+
+# Create a global logger instance
+logger = TestLogger().get_logger()
