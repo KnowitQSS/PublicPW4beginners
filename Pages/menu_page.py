@@ -5,13 +5,6 @@ class MenuPage(BasePage):
         super().__init__(page)
 
 
-    def navigate_to(self):
-        # Find and click the "Meny" (Menu) button
-        # The button is located using a combination of CSS selectors and text content
-        # It looks for an element with classes "chakra-button" and "chakra-text" that contains the text "Meny"
-        self.page.locator(".chakra-button .chakra-text").get_by_text("Meny").click()
-
-
     def click_on_kontakt(self):
         # Find and click the "Kontakt" (Contact) link
         # The link is located by its role ("link") and its name attribute or text content ("Kontakt")

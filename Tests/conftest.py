@@ -2,7 +2,6 @@ import os
 import pytest
 from datetime import datetime
 from playwright.sync_api import Playwright, Browser, Page, BrowserContext, sync_playwright
-from Pages.kontakt_page import KontaktPage
 from utils.logger_config import TestLogger
 
 
@@ -24,12 +23,11 @@ def browser(playwright: Playwright) -> Browser:
     browser.close()
 
 
-
 @pytest.fixture(scope="function")
-def page(browser: Browser) -> Page:
+def page(context: BrowserContext) -> Page:
     logger = TestLogger().get_logger()
     logger.info("Creating new page")
-    page = browser.new_page()
+    page = context.new_page()
     # Store the page in our global context
     test_context.current_page = page
 
@@ -60,17 +58,7 @@ def page(browser: Browser) -> Page:
     test_context.current_page = None
 
 
-@pytest.fixture(scope="function")
-def kontakt_page_fixture(page: Page):
-    logger = TestLogger().get_logger()
-    logger.info("Initializing KontaktPage")
-    kontakt_page = KontaktPage(page)
-    logger.info("Navigating to contact page")
-    kontakt_page.navigate_to()
-    logger.info("Dismissing cookies")
-    kontakt_page.dismiss_cookies()
-    yield kontakt_page
-    logger.info("Finished with KontaktPage")
+
 
 
 # Hook that runs when a test fails
@@ -153,8 +141,3 @@ def context(browser: Browser, request):
 
     context.close()
 
-
-@pytest.fixture(scope="function")
-def page(context: BrowserContext):
-    page = context.new_page()
-    yield page

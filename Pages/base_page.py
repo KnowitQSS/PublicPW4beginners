@@ -2,7 +2,6 @@ from utils.common_imports import *
 import os
 from abc import abstractmethod
 from datetime import datetime
-from pytest_base_url.plugin import base_url
 
 
 class BasePage:
@@ -18,6 +17,15 @@ class BasePage:
         Each child class must implement this property to define its URL segment.
         """
         raise NotImplementedError("Child classes must implement url_segment")
+
+    def get_header(self):
+        """
+        Return the header component when needed.
+        Import inside the method to avoid circular dependencies.
+        """
+        from Pages.headerComponent import HeaderComponent
+        return HeaderComponent(self.page)
+
 
     def dismiss_cookies(self):
         """

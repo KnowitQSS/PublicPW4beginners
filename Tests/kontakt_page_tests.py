@@ -1,12 +1,36 @@
 from utils.common_imports import *
 from Pages.kontakt_page import KontaktPage
 from Pages.landing_page import LandingPage
-from Pages.menu_page import MenuPage
+from Pages.lediga_jobb_page import LedigaJobbPage
+from utils.logger_config import TestLogger
+
+@pytest.fixture(scope="function")
+def kontakt_page_fixture(page: Page):
+    logger = TestLogger().get_logger()
+    logger.info("Initializing KontaktPage")
+    kontakt_page = KontaktPage(page)
+    logger.info("Navigating to contact page")
+    kontakt_page.navigate_to()
+    logger.info("Dismissing cookies")
+    kontakt_page.dismiss_cookies()
+    yield kontakt_page
+    logger.info("Finished with KontaktPage")
+
+def test_go_to_kontakt_page(page:Page):
+    kontakt_page = KontaktPage(page)
+    landing_page = LandingPage(page)
+    lediga_jobb = LedigaJobbPage(page)
+
+    kontakt_page.navigate_to()
+    kontakt_page.dismiss_cookies()
+    lediga_jobb.navigate_to()
+    landing_page.navigate_to()
+    kontakt_page.navigate_to()
+
 
 def test_does_address_exist(page: Page):
     # Initialize page objects for different sections of the website
     landing_page = LandingPage(page)
-    menu_page = MenuPage(page)
     kontakt_page = KontaktPage(page)
 
     # Navigate to the landing page
@@ -14,8 +38,11 @@ def test_does_address_exist(page: Page):
     # Dismiss any cookie consent dialogs
     landing_page.dismiss_cookies()
 
+    # Get the header component (can be done from any page)
+    header = landing_page.get_header()
+
     # Navigate to the contact page through the menu
-    menu_page.navigate_to()
+    menu_page = header.open_menu()
     menu_page.click_on_kontakt()
 
     # On the contact page, select the town "Lund"
@@ -23,7 +50,7 @@ def test_does_address_exist(page: Page):
     # Assert that the address "Mobilvägen 10" exists for Lund
     assert kontakt_page.does_address_exist("Mobilvägen 10")
 
-#@pytest.mark.trace
+@pytest.mark.trace
 def test_all_locations_exist(page: Page, kontakt_page_fixture):
 
     logger.info("Starting test_all_locations_exist")
