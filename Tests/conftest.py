@@ -1,9 +1,9 @@
 import os
 import pytest
-from datetime import datetime
+import time
+from datetime import datetime, timedelta
 from playwright.sync_api import Playwright, Browser, Page, BrowserContext, sync_playwright
 from utils.logger_config import TestLogger
-
 
 # Global variables to track the current context
 class TestContext:
@@ -12,6 +12,8 @@ class TestContext:
     current_action = None
 test_context = TestContext()
 
+# Configuration for log retention
+LOG_RETENTION_DAYS = 30  # Change this value as needed
 
 @pytest.fixture(scope="session")
 def browser(playwright: Playwright) -> Browser:
@@ -239,9 +241,46 @@ def page(context: BrowserContext) -> Page:
     page.close()
     test_context.current_page = None
 
+def delete_old_files(directory, retention_days):
+    """Delete files in the specified directory older than the retention period."""
+    if not os.path.exists(directory):
+        return
 
+    now = time.time()
+    cutoff = now - (retention_days * 86400)  # Convert days to seconds
 
+    for filename in os.listdir(directory):
+        if filename == ".gitkeep":
+            continue  # Skip the .gitkeep file
 
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path):
+            file_mtime = os.path.getmtime(file_path)
+            if file_mtime < cutoff:
+                try:
+                    os.remove(file_path)
+                    print(f"Deleted old file: {file_path}")
+                except Exception as e:
+                    print(f"Failed to delete {file_path}: {e}")
+
+def pytest_sessionstart(session):
+    """Hook to clean up old files at the start of a test session."""
+    base_dir = os.path.dirname(os.path.dirname(__file__))
+
+    # Directories to clean
+    directories_to_clean = [
+        os.path.join(base_dir, 'logs'),
+        os.path.join(base_dir, 'screenshots'),
+        os.path.join(base_dir, 'traces'),
+        os.path.join(base_dir, 'page_dumps'),
+    ]
+
+    for directory in directories_to_clean:
+        delete_old_files(directory, LOG_RETENTION_DAYS)
+
+def pytest_runtest_logstart(nodeid, location):
+    logger = TestLogger().get_logger()
+    logger.info(f"Test '{nodeid}' started")
 
 # Hook that runs when a test fails
 @pytest.hookimpl(tryfirst=True)

@@ -50,10 +50,10 @@ def test_does_address_exist(page: Page):
     # Assert that the address "Mobilvägen 10" exists for Lund
     assert kontakt_page.does_address_exist("Mobilvägen 10")
 
-@pytest.mark.trace
+#@pytest.mark.trace
 def test_all_locations_exist(page: Page, kontakt_page_fixture):
 
-    logger.info("Starting test_all_locations_exist")
+    logger.info("It is possible to add logg messages to the test")
     # Get a list of all the locations from location buttons
     locations_list = kontakt_page_fixture.extract_locations_from_button_texts()
 
