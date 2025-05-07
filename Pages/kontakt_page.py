@@ -14,8 +14,7 @@ class KontaktPage(BasePage):
         # Click on a button representing a specific city
         # The button is identified by its role ("button") and name attribute or text content (city)
         # The city parameter allows this method to be used for different towns/cities
-        self.page.get_by_role("button", name=city).click()
-
+        self.click_by_role("button", name=city)
 
     def does_address_exist(self, address):
         # Check if a specific address exists on the page

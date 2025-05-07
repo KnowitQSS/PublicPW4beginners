@@ -21,7 +21,7 @@ class LedigaJobbPage(BasePage):
         """
         # Click on dropdown "Ort" to be able to filter
         #self.page.locator(".chakra-button .chakra-text").get_by_text("Ort").click()
-        self.page.get_by_role("button", name="ort").click()
+        self.click_by_role("button", name="Ort")
 
         # Select "city" in the dropdown
         self.page.locator("#Dropdown-1-options .chakra-text").get_by_text(city).click()
