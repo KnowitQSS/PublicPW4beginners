@@ -44,44 +44,7 @@ def page(context: BrowserContext) -> Page:
     def click_with_logging(selector, **kwargs):
         try:
             element = page.locator(selector)
-            element_info = []
-
-            # Get element text content
-            text = element.text_content()
-            if text and text.strip():
-                element_info.append(f"text='{text.strip()}'")
-
-            # Get common HTML attributes
-            for attr in ['role', 'name', 'type', 'id', 'class', 'aria-label', 'title', 'data-testid', 'value', 'placeholder']:
-                value = element.get_attribute(attr)
-                if value:
-                    element_info.append(f"{attr}='{value}'")
-
-            # Get computed styles that may be useful
-            for style in ['display', 'visibility', 'pointer-events']:
-                value = element.evaluate(f'el => getComputedStyle(el).{style}')
-                if value and value not in ['initial', 'inherit']:
-                    element_info.append(f"style-{style}='{value}'")
-
-            # Check element state
-            is_visible = element.is_visible()
-            is_enabled = element.is_enabled()
-            is_editable = element.is_editable()
-            if not is_visible:
-                element_info.append("not visible")
-            if not is_enabled:
-                element_info.append("disabled")
-            if is_editable:
-                element_info.append("editable")
-
-            # Log element position
-            bbox = element.bounding_box()
-            if bbox:
-                element_info.append(f"position=(x:{bbox['x']:.0f},y:{bbox['y']:.0f})")
-
-            # Log the detailed information
-            details = f" ({', '.join(element_info)})" if element_info else ""
-            logger.info(f"Clicking on '{selector}'{details}")
+            log_element_details("Clicking", selector, element, logger, **kwargs)
 
             test_context.current_selector = selector
             test_context.current_action = "click"
@@ -94,55 +57,20 @@ def page(context: BrowserContext) -> Page:
     def fill_with_logging(selector, value, **kwargs):
         try:
             element = page.locator(selector)
-            element_info = []
-
-            # Get common HTML attributes
-            for attr in ['role', 'name', 'type', 'id', 'class', 'aria-label', 'title', 'data-testid', 'value', 'placeholder']:
-                value_attr = element.get_attribute(attr)
-                if value_attr:
-                    element_info.append(f"{attr}='{value_attr}'")
-
-            # Get computed styles
-            for style in ['display', 'visibility', 'pointer-events']:
-                style_value = element.evaluate(f'el => getComputedStyle(el).{style}')
-                if style_value and style_value not in ['initial', 'inherit']:
-                    element_info.append(f"style-{style}='{style_value}'")
-
-            # Check element state
-            is_visible = element.is_visible()
-            is_enabled = element.is_enabled()
-            is_editable = element.is_editable()
-            if not is_visible:
-                element_info.append("not visible")
-            if not is_enabled:
-                element_info.append("disabled")
-            if is_editable:
-                element_info.append("editable")
-
-            # Log element position
-            bbox = element.bounding_box()
-            if bbox:
-                element_info.append(f"position=(x:{bbox['x']:.0f},y:{bbox['y']:.0f})")
-
-            # Log the detailed information
-            details = f" ({', '.join(element_info)})" if element_info else ""
-            logger.info(f"Filling '{selector}' with value '{value}'{details}")
+            log_element_details("Filling", selector, element, logger, **kwargs)
 
             test_context.current_selector = selector
             test_context.current_action = "fill"
             return original_fill(selector, value, **kwargs)
         except Exception as e:
-            logger.error(f"Failed to fill '{selector}': {str(e)}")
+            logger.error(f"Failed to fill '{selector}' with value '{value}': {str(e)}")
             raise
     page.fill = fill_with_logging
 
     def type_with_logging(selector, text, **kwargs):
         try:
             element = page.locator(selector)
-            element_info = extract_element_info(element)
-            details = f" ({', '.join(element_info)})" if element_info else ""
-            logger.info(f"Typing '{text}' into '{selector}'{details}")
-
+            log_element_details("Typing", selector, element, logger, **kwargs)
             test_context.current_selector = selector
             test_context.current_action = "type"
             return original_type(selector, text, **kwargs)
@@ -154,10 +82,7 @@ def page(context: BrowserContext) -> Page:
     def press_with_logging(selector, key, **kwargs):
         try:
             element = page.locator(selector)
-            element_info = extract_element_info(element)
-            details = f" ({', '.join(element_info)})" if element_info else ""
-            logger.info(f"Pressing '{key}' on '{selector}'{details}")
-
+            log_element_details("Pressing", selector, element, logger, **kwargs)
             test_context.current_selector = selector
             test_context.current_action = "press"
             return original_press(selector, key, **kwargs)
@@ -169,10 +94,7 @@ def page(context: BrowserContext) -> Page:
     def select_option_with_logging(selector, value, **kwargs):
         try:
             element = page.locator(selector)
-            element_info = extract_element_info(element)
-            details = f" ({', '.join(element_info)})" if element_info else ""
-            logger.info(f"Selecting option '{value}' in '{selector}'{details}")
-
+            log_element_details("Selecting option", selector, element, logger, **kwargs)
             test_context.current_selector = selector
             test_context.current_action = "select_option"
             return original_select_option(selector, value, **kwargs)
@@ -184,10 +106,7 @@ def page(context: BrowserContext) -> Page:
     def check_with_logging(selector, **kwargs):
         try:
             element = page.locator(selector)
-            element_info = extract_element_info(element)
-            details = f" ({', '.join(element_info)})" if element_info else ""
-            logger.info(f"Checking checkbox '{selector}'{details}")
-
+            log_element_details("Checkking", selector, element, logger, **kwargs)
             test_context.current_selector = selector
             test_context.current_action = "check"
             return original_check(selector, **kwargs)
@@ -196,7 +115,92 @@ def page(context: BrowserContext) -> Page:
             raise
     page.check = check_with_logging
 
-    def extract_element_info(element):
+    def click_by_role_with_logging(role: str, name: str = None, **kwargs):
+        role_desc = f"role='{role}'"
+        if name:
+            role_desc += f", name='{name}'"
+
+        try:
+            element = page.get_by_role(role, name=name) if name else page.get_by_role(role)
+
+            try:
+                element_info = extract_element_info(element)
+                details = f" ({', '.join(element_info)})" if element_info else ""
+            except Exception:
+                details = ""
+
+            logger.info(f"Clicking element by {role_desc}{details}")
+
+            test_context.current_selector = f"{role_desc}"
+            test_context.current_action = "click_by_role"
+            return element.click(**kwargs)
+        except Exception as e:
+            logger.error(f"Failed to click element by {role_desc}: {str(e)}")
+            raise
+    page.click_by_role = click_by_role_with_logging
+
+    def fill_by_role_with_logging(self, role: str, name: str = None, **kwargs):
+        role_desc = f"role='{role}'"
+        if name:
+            role_desc += f", name='{name}'"
+
+        try:
+            element = page.get_by_role(role, name=name) if name else page.get_by_role(role)
+
+            try:
+                element_info = extract_element_info(element)
+                details = f" ({', '.join(element_info)})" if element_info else ""
+            except Exception:
+                details = ""
+
+            logger.info(f"Filling element by {role_desc}{details}")
+
+            test_context.current_selector = f"{role_desc}"
+            test_context.current_action = "fill_by_role"
+            return element.fill(**kwargs)
+        except Exception as e:
+            logger.error(f"Failed to fill element by {role_desc}: {str(e)}")
+            raise
+    page.fill_by_role = fill_by_role_with_logging
+
+    def select_option_by_role_with_logging(self, role: str, value: str, name: str = None, **kwargs):
+        role_desc = f"role='{role}'"
+        if name:
+            role_desc += f", name='{name}'"
+
+        try:
+            element = page.get_by_role(role, name=name) if name else page.get_by_role(role)
+
+            try:
+                element_info = extract_element_info(element)
+                details = f" ({', '.join(element_info)})" if element_info else ""
+            except Exception:
+                details = ""
+
+            logger.info(f"Selecting option '{value}' in element by {role_desc}{details}")
+
+            test_context.current_selector = f"{role_desc}"
+            test_context.current_action = "select_option_by_role"
+            return element.select_option(value, **kwargs)
+        except Exception as e:
+            logger.error(f"Failed to select option in element by {role_desc}: {str(e)}")
+            raise
+    page.select_option = select_option_by_role_with_logging
+
+    def log_element_details(action, selector, element, logger, **kwargs):
+        try:
+            element_info = extract_element_info(element)
+            details = f" ({', '.join(element_info)})" if element_info else ""
+            logger.info(f"{action} on '{selector}'{details}")
+        except Exception as e:
+            logger.warning(f"Failed to log details for '{selector}': {str(e)}")
+
+    yield page
+    logger.info("Closing page")
+    page.close()
+    test_context.current_page = None
+
+def extract_element_info(element):
         """Helper function to extract common element information"""
         element_info = []
 
@@ -213,20 +217,14 @@ def page(context: BrowserContext) -> Page:
 
         # Get computed styles
         for style in ['display', 'visibility', 'pointer-events']:
-            value = element.evaluate(f'el => getComputedStyle(el).{style}')
+            value = element.evaluate(f'el => getComputedStyle(el)["{style}"]')
             if value and value not in ['initial', 'inherit']:
                 element_info.append(f"style-{style}='{value}'")
 
         # Check element state
         is_visible = element.is_visible()
-        is_enabled = element.is_enabled()
-        is_editable = element.is_editable()
         if not is_visible:
             element_info.append("not visible")
-        if not is_enabled:
-            element_info.append("disabled")
-        if is_editable:
-            element_info.append("editable")
 
         # Log element position
         bbox = element.bounding_box()
@@ -234,12 +232,6 @@ def page(context: BrowserContext) -> Page:
             element_info.append(f"position=(x:{bbox['x']:.0f},y:{bbox['y']:.0f})")
 
         return element_info
-
-
-    yield page
-    logger.info("Closing page")
-    page.close()
-    test_context.current_page = None
 
 def delete_old_files(directory, retention_days):
     """Delete files in the specified directory older than the retention period."""
@@ -288,13 +280,6 @@ def pytest_exception_interact(node, call, report):
     logger = TestLogger().get_logger()
     logger.error(f"Test failed: {node.name}")
 
-    # Get error details
-    excinfo = call.excinfo
-    if excinfo:
-        logger.error(f"Exception type: {excinfo.typename}")
-        logger.error(f"Exception message: {excinfo.value}")
-
-    # Log the current context information
     if test_context.current_page:
         try:
             url = test_context.current_page.url
@@ -325,7 +310,8 @@ def pytest_exception_interact(node, call, report):
 
         except Exception as e:
             logger.error(f"Failed to capture diagnostic information: {str(e)}")
-
+    else:
+        logger.warning("No current page available to capture diagnostics.")
 
 def pytest_configure(config):
     """Register custom markers."""
