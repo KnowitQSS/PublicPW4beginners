@@ -280,6 +280,13 @@ def pytest_exception_interact(node, call, report):
     logger = TestLogger().get_logger()
     logger.error(f"Test failed: {node.name}")
 
+    # Get error details
+    excinfo = call.excinfo
+    if excinfo:
+        logger.error(f"Exception type: {excinfo.typename}")
+        logger.error(f"Exception message: {excinfo.value}")
+
+    # Log the current context information
     if test_context.current_page:
         try:
             url = test_context.current_page.url
